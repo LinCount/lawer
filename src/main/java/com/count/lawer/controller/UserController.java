@@ -6,27 +6,30 @@ import com.count.lawer.Api.Token;
 import com.count.lawer.bean.User;
 import com.count.lawer.service.UserService;
 import com.count.lawer.RequeestBean.UserBean;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.UUID;
 
-
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
     @Autowired
     UserService userService;
+    @ApiOperation(value="测试接口",notes = "测试程序是否成功运行")
     @RequestMapping(value = "/getAllUser",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
     public ResponseResult getAllUser(){
         System.out.println("用户测试！！！！！！！！！！！！！！！！！");
         return Response.makeOKRsp("测试成功");
     }
+    @ApiOperation(value = "登录接口",notes = "用户登录提交数据，返回token")
     @RequestMapping(value = "/login",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
     public ResponseResult<Token> login(@RequestBody UserBean userBean){
         User user=userService.findUserByAccount(userBean.account);
         System.out.println(user.getAccount()+"   "+user.getPassword()+"  "+user.getUserId()+"  "+user.getToken());
+
         if(user!=null){
             if(userBean.account.equals(user.getAccount())&&userBean.password.equals(user.getPassword()))
             return Response.makeOKRsp(new Token().token=user.getToken());
@@ -49,7 +52,7 @@ public class UserController {
         user.setUserId(UUID.randomUUID().toString());
         user.setToken(token);
         Integer flag=userService.saveUser(user);
-        if (flag==1){
+        if (flag>=0){
             return Response.makeOKRsp(new Token().token=token);
         }else {
             return Response.makeErrRsp("注册失败");
