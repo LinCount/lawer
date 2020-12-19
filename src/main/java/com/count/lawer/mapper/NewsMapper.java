@@ -1,9 +1,7 @@
 package com.count.lawer.mapper;
 
 import com.count.lawer.bean.News;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +18,12 @@ public interface NewsMapper {
     News findNewsById(@Param("id") String id);
     @Select("select newId,pupOrgan,pupContent,pupTittle,newTime from news order by newTime desc limit 10")
     List<News> getListNewsByTime();
-
+    @Insert("insert into news(newId,pupOrgan,pupContent,pupTittle,newTime)" +
+            "values(#{newId},#{pupOrgan},#{pupContent},#{pupTittle},#{newTime})")
+    Integer saveNews(News news);
+    @Delete("delete from news where newId=#{newId}")
+    Integer delById(@Param("newId")String newId);
+    @Update("update news set pupOrgan=#{pupOrgan},pupContent=,#{pupContent},pupTittle=#{pupTittle},newTime=#{newTime}" +
+            "where newId=#{newId}")
+    Integer update(News news);
 }
