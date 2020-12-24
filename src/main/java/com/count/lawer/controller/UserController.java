@@ -7,6 +7,8 @@ import com.count.lawer.bean.User;
 import com.count.lawer.service.UserService;
 import com.count.lawer.RequeestBean.UserBean;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
+    private final Logger logger= LoggerFactory.getLogger(UserController.class);
     @Autowired
     UserService userService;
     @ApiOperation(value="测试接口",notes = "测试程序是否成功运行")

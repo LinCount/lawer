@@ -14,7 +14,7 @@ public interface InvitationDiscussMapper {
             "values(#{discussId},#{invitationId},#{userId},#{discussContent},#{discussTime})")
     Integer saveDiscuss(InvitationDiscuss discuss);
     @Delete("delete from invitationDiscuss where discussId=#{discussId}")
-    Integer delById(@Param("discussId") String discussId);
+    Integer delDiscussById(@Param("discussId") String discussId);
     @Update("update invitationDiscuss set" +
             "invitationId=#{invitationId},userId=#{userId},discussContent=#{discussContent},discussTime=#{discussTime}" +
             "where discussId=#{discussId}")
@@ -23,5 +23,5 @@ public interface InvitationDiscussMapper {
     List<InvitationDiscuss> selectDiscussByNum(@Param("num")Integer num);
     @Select("select discussId,invitationId,userId,discussContent,discussTime from invitationDiscuss" +
             "where discussId=#{discussId} limit 1")
-    InvitationDiscuss selectDiscussById(@Param("num")String discussId);
+    InvitationDiscuss selectDiscussById(@Param("discussId")String discussId);
 }

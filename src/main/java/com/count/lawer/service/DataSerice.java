@@ -25,5 +25,10 @@ public class DataSerice {
     public List<DataInfo> getListDataAsUserId(String userId, Integer finishTag){
         return dataMapper.getListDataAsUserId(userId,finishTag);
     }
-
+    public Integer updateData(Data data){
+        return dataMapper.updateData(data);
+    }
+    public Integer delData(String dataId){
+        return dataMapper.delData(dataId);
+    }
 }

@@ -5,6 +5,8 @@ package com.count.lawer.controller;
  *@Vesion 1.0
  */
 
+import com.count.lawer.Api.Response;
+import com.count.lawer.Api.ResponseResult;
 import com.count.lawer.RequeestBean.DataInfo;
 import com.count.lawer.RequeestBean.OrderForm;
 import com.count.lawer.bean.Data;
@@ -27,11 +29,11 @@ public class DataController {
     DataSerice dataSerice;
     @ApiOperation(value="文件上传接口",notes = "返回文件名")
     @RequestMapping("/upload")
-    public String uploadToUser(@RequestParam("file") MultipartFile file) {
+    public ResponseResult uploadToUser(@RequestParam("file") MultipartFile file) {
         logger.info("接收到的文件数据为：" + file);
         if (file.isEmpty()) {
 
-            return "上传文件为空";
+            return Response.makeErrRsp("上传文件为空");
         }
         // 获取文件全名a.py
         String fileName = file.getOriginalFilename();
@@ -58,15 +60,15 @@ public class DataController {
                 dest.mkdirs();
             }
             file.transferTo(dest);
-            return fileName;
+            return Response.makeOKRsp(fileName);
         } catch (Exception e) {
             logger.error("文件上传错误");
-            return "";
+            return Response.makeErrRsp("文件上传错误");
         }
     }
     @ApiOperation(value="订单生成接口",notes = "咨询订单")
     @RequestMapping(value = "/uploadInfo",method = RequestMethod.POST)
-    public String uploadDataInfo(@RequestBody OrderForm orderForm){
+    public ResponseResult uploadDataInfo(@RequestBody OrderForm orderForm){
         System.out.println(orderForm.toString());
         String dataId=UUID.randomUUID().toString();
         Data data=new Data();
@@ -82,16 +84,16 @@ public class DataController {
         dataSerice.saveDataInfo(data);
         logger.info(dataId+"  订单建立成功！！");
 
-        return  "success";
+        return  Response.makeOKRsp("成功");
     }
     @ApiOperation(value = "订单消息接口",notes = "返回律师是否接单等信息")
-    @RequestMapping(value = "/initNumber",method= RequestMethod.GET)
-    public List<DataInfo> getDataInfo(@RequestParam("userId") String userId){
+    @RequestMapping(value = "/initNumber/{userId}",method= RequestMethod.GET)
+    public ResponseResult<List<DataInfo>> getDataInfo(@RequestParam("userId") String userId){
         List dataList=new ArrayList<DataInfo>();
         //根据用户订单分别查询未完成订单，进行中订单，已完成订单
         dataList.add(dataSerice.getListDataAsUserId(userId,0));
         dataList.add(dataSerice.getListDataAsUserId(userId,1));
         dataList.add(dataSerice.getListDataAsUserId(userId,2));
-        return dataList;
+        return Response.makeOKRsp(dataList);
     }
 }

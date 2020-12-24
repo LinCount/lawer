@@ -22,8 +22,8 @@ public interface NewsMapper {
             "values(#{newId},#{pupOrgan},#{pupContent},#{pupTittle},#{newTime})")
     Integer saveNews(News news);
     @Delete("delete from news where newId=#{newId}")
-    Integer delById(@Param("newId")String newId);
+    Integer delNewsById(@Param("newId")String newId);
     @Update("update news set pupOrgan=#{pupOrgan},pupContent=,#{pupContent},pupTittle=#{pupTittle},newTime=#{newTime}" +
             "where newId=#{newId}")
-    Integer update(News news);
+    Integer updateNews(News news);
 }

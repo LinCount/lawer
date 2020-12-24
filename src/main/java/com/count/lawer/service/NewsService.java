@@ -2,7 +2,6 @@ package com.count.lawer.service;
 
 import com.count.lawer.bean.News;
 import com.count.lawer.mapper.NewsMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +16,19 @@ import java.util.List;
 public class NewsService {
     @Autowired
     NewsMapper newsMapper;
-    public News findNewsById(@Param("id") String id){
+    public News findNewsById(String id){
         return newsMapper.findNewsById(id);
     }
     public List<News> getListNewsByTime(){
         return newsMapper.getListNewsByTime();
+    }
+    public Integer saveNews(News news){
+        return newsMapper.saveNews(news);
+    }
+    public Integer delNewsById(String newId){
+        return newsMapper.delNewsById(newId);
+    }
+    public Integer updateNews(News news){
+        return newsMapper.updateNews(news);
     }
 }
