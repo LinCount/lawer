@@ -12,4 +12,5 @@ public class ChartMessage implements Serializable {
     private String receiverId;//接受者id
     private String sendContent;//发送内容
     private Date sendTime;//发送时间
+
 }

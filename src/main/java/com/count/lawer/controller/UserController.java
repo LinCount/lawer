@@ -10,9 +10,12 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +32,7 @@ public class UserController {
     }
     @ApiOperation(value = "登录接口",notes = "用户登录提交数据，返回token")
     @RequestMapping(value = "/login",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
-    public ResponseResult<ResponseUser> login(@RequestBody UserBean userBean){
+    public ResponseResult<ResponseUser> login(@RequestBody UserBean userBean, HttpServletRequest request){
         User user=userService.findUserByAccount(userBean.account);
         System.out.println(user.getAccount()+"   "+user.getPassword()+"  "+user.getUserId()+"  "+user.getToken());
         if(user!=null){
@@ -38,6 +41,12 @@ public class UserController {
                 ruser.userName=user.getAccount();
                 ruser.userId=user.getUserId();
                 ruser.token=user.getToken();
+                System.out.println("登录：" + user.getUserId() + "：" + user.getToken());
+                //将userId作为用户标识存入session
+                HttpSession session = request.getSession();
+                if (null != session) {
+                    session.setAttribute("SESSION_USERNAME", user.getUserId());
+                }
                 return Response.makeOKRsp(ruser);
             }
             return Response.makeErrRsp("用户信息不正确");
