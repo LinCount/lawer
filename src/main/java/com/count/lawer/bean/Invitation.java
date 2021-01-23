@@ -9,6 +9,7 @@ import java.util.Date;
 public class Invitation implements Serializable {
     private String invitationId;//帖子Id
     private String userId;//用户id
+    private String type;//帖子类型
     private String content;//帖子内容
     private Date pupTime;//评论时间
     private Integer goodNo;//点赞数

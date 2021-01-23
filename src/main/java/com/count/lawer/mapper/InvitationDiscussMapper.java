@@ -24,4 +24,8 @@ public interface InvitationDiscussMapper {
     @Select("select discussId,invitationId,userId,discussContent,discussTime from invitationDiscuss" +
             "where discussId=#{discussId} limit 1")
     InvitationDiscuss selectDiscussById(@Param("discussId")String discussId);
+    @Select("select userId,discussContent,discussTime from invitationDiscuss " +
+            "where  discussId exists(" +
+            "select discussId from invitation where userId=#[userId])")
+    Integer selectDiscussByUserId(@Param("userId")String userId);
 }

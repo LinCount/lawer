@@ -11,6 +11,7 @@ import com.count.lawer.RequeestBean.DataInfo;
 import com.count.lawer.RequeestBean.OrderForm;
 import com.count.lawer.bean.Data;
 import com.count.lawer.service.DataSerice;
+import com.count.lawer.service.inter.PayService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class DataController {
     @Autowired
     DataSerice dataSerice;
     @ApiOperation(value="文件上传接口",notes = "返回文件名")
-    @RequestMapping("/upload")
+    @RequestMapping(value = "/upload",method = RequestMethod.POST)
     public ResponseResult uploadToUser(@RequestParam("file") MultipartFile file) {
         logger.info("接收到的文件数据为：" + file);
         if (file.isEmpty()) {
@@ -81,10 +82,15 @@ public class DataController {
         data.setDataContent(orderForm.content);
         data.setReplay(orderForm.money);
         //支付业务和保存订单,加事务，加锁
-        dataSerice.saveDataInfo(data);
+        String message=null;
+        try {
+            message=dataSerice.saveDataInfo(data);
+        }catch (Exception e){
+            logger.info(dataId+"  订单建立失败 ！！");
+            return Response.makeErrRsp(message);
+        }
         logger.info(dataId+"  订单建立成功！！");
-
-        return  Response.makeOKRsp("成功");
+        return  Response.makeOKRsp(message);
     }
     @ApiOperation(value = "订单消息接口",notes = "返回律师是否接单等信息")
     @RequestMapping(value = "/initNumber/{userId}",method= RequestMethod.GET)
